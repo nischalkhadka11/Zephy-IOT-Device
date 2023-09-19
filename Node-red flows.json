@@ -1,0 +1,2843 @@
+[
+    {
+        "id": "11912c511061125c",
+        "type": "tab",
+        "label": "Project",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ef04617fe7135fa1",
+        "type": "SGP30",
+        "z": "11912c511061125c",
+        "name": "",
+        "address": "0x58",
+        "bus": 1,
+        "x": 380,
+        "y": 660,
+        "wires": [
+            [
+                "8da3a66a0a4c3ce4",
+                "78bc4709f7b7494f"
+            ]
+        ]
+    },
+    {
+        "id": "f3214424f4c7a84b",
+        "type": "inject",
+        "z": "11912c511061125c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 660,
+        "wires": [
+            [
+                "ef04617fe7135fa1"
+            ]
+        ]
+    },
+    {
+        "id": "8da3a66a0a4c3ce4",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "3552f90b44e58430",
+        "type": "inject",
+        "z": "11912c511061125c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 820,
+        "wires": [
+            [
+                "48e94aaf2e2e1610"
+            ]
+        ]
+    },
+    {
+        "id": "be0ba0481aabf502",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "48e94aaf2e2e1610",
+        "type": "python3-function",
+        "z": "11912c511061125c",
+        "name": "Get Air Quality",
+        "func": "import time\nimport grovepi\n\n# Connect the Grove Air Quality Sensor to analog port A0\n# SIG,NC,VCC,GND\nair_sensor = 0\n\ngrovepi.pinMode(air_sensor,\"INPUT\")\n\nmsg = {}\n\ntry:\n    # Get sensor value\n    sensor_value = grovepi.analogRead(air_sensor)\n\nexcept IOError:\n    print (\"Error\")\n\nif (sensor_value >= 0):\n    msg['payload'] = sensor_value\nelse:\n    msg['payload'] = -1\n\nreturn msg",
+        "outputs": 1,
+        "x": 400,
+        "y": 820,
+        "wires": [
+            [
+                "be0ba0481aabf502",
+                "f0a7db36c1027382"
+            ]
+        ]
+    },
+    {
+        "id": "a43af306755de6b1",
+        "type": "inject",
+        "z": "11912c511061125c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 980,
+        "wires": [
+            [
+                "9517da54d8a7778d"
+            ]
+        ]
+    },
+    {
+        "id": "eaf8582750757e16",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 930,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "9517da54d8a7778d",
+        "type": "python3-function",
+        "z": "11912c511061125c",
+        "name": "Get Dust value",
+        "func": "import time\nimport grovepi\n\nprint(\"Reading from the Grove Dust Sensor\")\n\n# defaults to pin 2\nnew_val = grovepi.dust_sensor_read()\nmsg['payload'] = new_val\n    \nreturn msg",
+        "outputs": 1,
+        "x": 380,
+        "y": 980,
+        "wires": [
+            [
+                "87936258e811ba6c"
+            ]
+        ]
+    },
+    {
+        "id": "61f5e45db29f64b3",
+        "type": "python3-function",
+        "z": "11912c511061125c",
+        "name": "Initialize",
+        "func": "import grovepi\n\nprint(\"Starting Grove Dust Sensor\")\n\n# default pin is 2 and default update period is 30000 ms\ngrovepi.dust_sensor_en()\n",
+        "outputs": 1,
+        "x": 480,
+        "y": 1180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3d02a6d7244ba04a",
+        "type": "inject",
+        "z": "11912c511061125c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 190,
+        "y": 1180,
+        "wires": [
+            [
+                "61f5e45db29f64b3"
+            ]
+        ]
+    },
+    {
+        "id": "47bf1b9e02f028a2",
+        "type": "python3-function",
+        "z": "11912c511061125c",
+        "name": "Exit",
+        "func": "import grovepi\n\nprint(\"Disabling Grove Dust Sensor\")\n\ngrovepi.dust_sensor_dis()\n",
+        "outputs": 1,
+        "x": 450,
+        "y": 1260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f5d61fc1d4436277",
+        "type": "inject",
+        "z": "11912c511061125c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 220,
+        "y": 1260,
+        "wires": [
+            [
+                "47bf1b9e02f028a2"
+            ]
+        ]
+    },
+    {
+        "id": "87936258e811ba6c",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Detect change",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload[0]",
+        "topi": "topic",
+        "x": 500,
+        "y": 1080,
+        "wires": [
+            [
+                "2f07463465ab9214"
+            ]
+        ]
+    },
+    {
+        "id": "2f07463465ab9214",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Filter bad values",
+        "func": "narrowbandEq",
+        "gap": "5000",
+        "start": "0",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload[0]",
+        "topi": "topic",
+        "x": 720,
+        "y": 1080,
+        "wires": [
+            [
+                "eaf8582750757e16",
+                "45d1ce456c83b129"
+            ]
+        ]
+    },
+    {
+        "id": "e308765afa6459d0",
+        "type": "influxdb out",
+        "z": "11912c511061125c",
+        "influxdb": "a82e2ef3e4055598",
+        "name": "sgp30",
+        "measurement": "sgp30",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 1070,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "00a0feca81c47782",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "create sgp30 payload",
+        "func": "msg.sgp30 = msg.payload;\nvar room = flow.get('room') || 1;\nmsg.payload = {};\n\nmsg.payload = [{\n    ...(msg.sgp30[\"tvoc\"] != undefined) && {tvoc: msg.sgp30[\"tvoc\"]},\n    ...(msg.sgp30[\"eco2\"] != undefined) && {eco2: msg.sgp30[\"eco2\"]},\n    ...(msg.sgp30[\"ethanol\"] != undefined) && {ethanol: msg.sgp30[\"ethanol\"]},\n    ...(msg.sgp30[\"hydrogen\"] != undefined) && {hydrogen: msg.sgp30[\"hydrogen\"]},\n    ...(msg.sgp30[\"overall_air_quality\"] != undefined) && {overall_air_quality: msg.sgp30[\"overall_air_quality\"]}\n},\n{\n    room: room\n}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 660,
+        "wires": [
+            [
+                "5580be06b84b1db5",
+                "e308765afa6459d0"
+            ]
+        ]
+    },
+    {
+        "id": "5580be06b84b1db5",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1110,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "174b7c28283f08b4",
+        "type": "influxdb out",
+        "z": "11912c511061125c",
+        "influxdb": "a82e2ef3e4055598",
+        "name": "airquality_v1_3",
+        "measurement": "airquality_v1_3",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 1180,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "480a9ae06f4c4c67",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "create Air Quality payload",
+        "func": "msg.airquality = msg.payload;\nvar room = flow.get('room') || 1;\nmsg.payload = {};\n\nmsg.payload = [{\n    ...(msg.airquality != undefined && !isNaN(msg.airquality)) && {airquality: msg.airquality}\n},\n{\n    room: room\n}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 910,
+        "y": 820,
+        "wires": [
+            [
+                "174b7c28283f08b4",
+                "fc0f6c6b477315af"
+            ]
+        ]
+    },
+    {
+        "id": "fc0f6c6b477315af",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1170,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "d867d7a165c1f853",
+        "type": "influxdb out",
+        "z": "11912c511061125c",
+        "influxdb": "a82e2ef3e4055598",
+        "name": "dust",
+        "measurement": "dust",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 1090,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "45d1ce456c83b129",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "create Dust payload",
+        "func": "msg.dust = msg.payload;\nvar room = flow.get('room') || 1;\nmsg.payload = {};\n\nmsg.payload = [{\n    ...(msg.dust != undefined && !isNaN(msg.dust[0])) && {lpo_time: msg.dust[0]},\n    ...(msg.dust != undefined && !isNaN(msg.dust[1])) && {lpo_percent: parseFloat(msg.dust[1].toFixed(2))},\n    ...(msg.dust != undefined && !isNaN(msg.dust[2])) && {concentration: parseFloat(msg.dust[2].toFixed(2))}\n},\n{\n    room: room\n}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 860,
+        "y": 980,
+        "wires": [
+            [
+                "d867d7a165c1f853",
+                "2ca40e8732071aed"
+            ]
+        ]
+    },
+    {
+        "id": "2ca40e8732071aed",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1190,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "6a5e48ae1828ee84",
+        "type": "grove analog sensor",
+        "z": "11912c511061125c",
+        "name": "Light sensor",
+        "pin": "2",
+        "sensor": "light",
+        "repeat": "2",
+        "board": "84dbf1b7e80b74de",
+        "x": 270,
+        "y": 180,
+        "wires": [
+            [
+                "c09c5ae8dad0912f",
+                "e7023c2ef9b5df81"
+            ]
+        ]
+    },
+    {
+        "id": "e7023c2ef9b5df81",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "Set Room",
+        "func": "var lightThreshold = flow.get('lightThreshold') || 600;\n\nif (msg.payload > lightThreshold) {\n    msg.payload = 2;\n} else {\n    msg.payload = 1;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 180,
+        "wires": [
+            [
+                "8a9f123de42282c7",
+                "f4bbb594a655a39f"
+            ]
+        ]
+    },
+    {
+        "id": "46d5e1d7ceaabde7",
+        "type": "inject",
+        "z": "11912c511061125c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 740,
+        "y": 1180,
+        "wires": [
+            [
+                "20ed786d59221d51"
+            ]
+        ]
+    },
+    {
+        "id": "20ed786d59221d51",
+        "type": "change",
+        "z": "11912c511061125c",
+        "name": "Delete variables",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "room",
+                "pt": "flow"
+            },
+            {
+                "t": "delete",
+                "p": "lightThreshold",
+                "pt": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1000,
+        "y": 1180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "db50f7bdfd8dbe46",
+        "type": "inject",
+        "z": "11912c511061125c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 750,
+        "y": 1260,
+        "wires": [
+            [
+                "fa07568e1a873e00"
+            ]
+        ]
+    },
+    {
+        "id": "fa07568e1a873e00",
+        "type": "change",
+        "z": "11912c511061125c",
+        "name": "Initialize variables",
+        "rules": [
+            {
+                "t": "set",
+                "p": "room",
+                "pt": "flow",
+                "to": "1",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "lightThreshold",
+                "pt": "flow",
+                "to": "600",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "roomConfig",
+                "pt": "flow",
+                "to": "[{\"minTemp\": 24.5, \"maxTemp\": 25.5, \"minHum\": 42, \"maxHum\": 80, \"airqualityThreshold\": 100},{\"minTemp\": 24.5, \"maxTemp\": 25.5, \"minHum\": 51, \"maxHum\": 80, \"airqualityThreshold\": 100}]",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "dustThreshold",
+                "pt": "flow",
+                "to": "2000",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "tvocThreshold",
+                "pt": "flow",
+                "to": "20",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "tempFrequency",
+                "pt": "flow",
+                "to": "3",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "humFrequency",
+                "pt": "flow",
+                "to": "3",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "airqualityFrequency",
+                "pt": "flow",
+                "to": "3",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "tvocFrequency",
+                "pt": "flow",
+                "to": "3",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "exhaustMac",
+                "pt": "flow",
+                "to": "2CAA8E6DE06F",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "pedestalMac",
+                "pt": "flow",
+                "to": "2CAA8E6DDF9C",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "maxHumStatus",
+                "pt": "flow",
+                "to": "false",
+                "tot": "bool"
+            },
+            {
+                "t": "set",
+                "p": "airqualityStatus",
+                "pt": "flow",
+                "to": "false",
+                "tot": "bool"
+            },
+            {
+                "t": "set",
+                "p": "tvocStatus",
+                "pt": "flow",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1010,
+        "y": 1260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "78bc4709f7b7494f",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Filter bad values",
+        "func": "narrowbandEq",
+        "gap": "3000",
+        "start": "0",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload.tvoc",
+        "topi": "topic",
+        "x": 600,
+        "y": 660,
+        "wires": [
+            [
+                "00a0feca81c47782"
+            ]
+        ]
+    },
+    {
+        "id": "f0a7db36c1027382",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Filter bad values",
+        "func": "narrowbandEq",
+        "gap": "2000",
+        "start": "50",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload",
+        "topi": "topic",
+        "x": 640,
+        "y": 820,
+        "wires": [
+            [
+                "480a9ae06f4c4c67"
+            ]
+        ]
+    },
+    {
+        "id": "c09c5ae8dad0912f",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 490,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "d524d130e331a189",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1170,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "7a5cc595e67ccc50",
+        "type": "grove digital sensor",
+        "z": "11912c511061125c",
+        "name": "Temperature and Humidity",
+        "board": "84dbf1b7e80b74de",
+        "sensor": "dht11",
+        "repeat": "3",
+        "pin": "3",
+        "x": 130,
+        "y": 340,
+        "wires": [
+            [
+                "f2608e8d194ca870",
+                "c1fb3e11f594ad86"
+            ]
+        ]
+    },
+    {
+        "id": "8518fed186f7e85a",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "create dht11 payload",
+        "func": "var room = flow.get('room') || 1;\n\nif (!(isNaN(msg.payload['temperature'])) || !(isNaN(msg.payload['humidity'])) || (isNaN(msg.payload['heatIndex']))) {\n    msg.payload = [{\n        temp: msg.payload['temperature'],\n        hum: msg.payload['humidity'],\n        heat: msg.payload['heatIndex']\n    },\n    {\n        room: room\n    }];\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 940,
+        "y": 500,
+        "wires": [
+            [
+                "d5163b691c32f315",
+                "1a26e97445702159"
+            ]
+        ]
+    },
+    {
+        "id": "d5163b691c32f315",
+        "type": "influxdb out",
+        "z": "11912c511061125c",
+        "influxdb": "a82e2ef3e4055598",
+        "name": "Temperature, Humidity & HeatIndex",
+        "measurement": "dht11",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 1220,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "1a26e97445702159",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1150,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "138c919af92af875",
+        "type": "grove lcdrgb output",
+        "z": "11912c511061125c",
+        "name": "Humidity LCD",
+        "board": "84dbf1b7e80b74de",
+        "pin": "2",
+        "x": 1200,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "a3525d617186b762",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "Capture Humidity extremes",
+        "func": "var hum = 0;\nif (msg.payload.humidity >= 70) {\n    hum = 1;\n    msg.payload = {\"text\": \"High Humidity\", \"rgb\": [70,0,0]};\n} else if (msg.payload.humidity < 51) {\n    hum = -1;\n    msg.payload = {\"text\": \"Low Humidity\", \"rgb\": [70,0,0]};\n} else {\n    hum = 0;\n    msg.payload = {\"text\": \"Humidity: Normal\", \"rgb\": [0,70,0]};\n}\nflow.set(\"humidity\", hum);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 440,
+        "wires": [
+            [
+                "138c919af92af875"
+            ]
+        ]
+    },
+    {
+        "id": "f2608e8d194ca870",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Filter bad temperature values",
+        "func": "narrowbandEq",
+        "gap": "200",
+        "start": "20",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload.temperature",
+        "topi": "payload.humidity",
+        "x": 300,
+        "y": 440,
+        "wires": [
+            [
+                "4b885e3043b24b49"
+            ]
+        ]
+    },
+    {
+        "id": "4b885e3043b24b49",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Filter bad humidity values",
+        "func": "narrowbandEq",
+        "gap": "200",
+        "start": "40",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload.humidity",
+        "topi": "payload.humidity",
+        "x": 590,
+        "y": 360,
+        "wires": [
+            [
+                "fb5eadd33a6fc7bd"
+            ]
+        ]
+    },
+    {
+        "id": "fb5eadd33a6fc7bd",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Filter bad heatIndex values",
+        "func": "narrowbandEq",
+        "gap": "200",
+        "start": "19",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload.heatIndex",
+        "topi": "payload.humidity",
+        "x": 640,
+        "y": 440,
+        "wires": [
+            [
+                "a3525d617186b762",
+                "8518fed186f7e85a"
+            ]
+        ]
+    },
+    {
+        "id": "445a417c7b1788ac",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 1360,
+        "wires": []
+    },
+    {
+        "id": "6fae814ee24ec30d",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "check Min Temperature",
+        "func": "var roomConfig = flow.get('roomConfig') || [{\"minTemp\": 20, \"maxTemp\": 24, \"minHum\": 42, \"maxHum\": 48, \"airqualityThreshold\": 75}, {\"minTemp\": 20, \"maxTemp\": 24, \"minHum\": 42, \"maxHum\": 48, \"airqualityThreshold\": 75}];\nvar room = flow.get('room') || 1;\n// var minTemp = roomConfig[room]['minTemp'];\nvar minTemp = 25.5;\nif (roomConfig[room] != undefined) {\n    minTemp = roomConfig[room].minTemp;\n}\n\nvar tempFrequency = flow.get('tempFrequency') || 3;\nlet count = 0;\nif (msg.payload != undefined && Array.isArray(msg.payload)) {\n    for (let i = 0; i < msg.payload.length; i++) {\n        if (msg.payload[i].temp < minTemp) {\n            count = count + 1;\n        }\n    }\n}\n\nif (count > tempFrequency)\n    msg.payload = true;\nelse\n    msg.payload = false;\n\nreturn msg;    ",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 1400,
+        "wires": [
+            [
+                "445a417c7b1788ac",
+                "5b9d3bfab190ee71"
+            ]
+        ]
+    },
+    {
+        "id": "63bbe9882c3e1e79",
+        "type": "influxdb in",
+        "z": "11912c511061125c",
+        "influxdb": "a82e2ef3e4055598",
+        "name": "Query dht11",
+        "query": "select * from dht11 order by time desc limit 5",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "organisation",
+        "x": 110,
+        "y": 1560,
+        "wires": [
+            [
+                "c53b8b7dcaadd798",
+                "6fae814ee24ec30d",
+                "0849eb0706dc637e",
+                "1eaaba856e3b62ac"
+            ]
+        ]
+    },
+    {
+        "id": "dd731696ecb4bbe9",
+        "type": "inject",
+        "z": "11912c511061125c",
+        "name": "dht11 Trigger",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 1500,
+        "wires": [
+            [
+                "63bbe9882c3e1e79"
+            ]
+        ]
+    },
+    {
+        "id": "9e6755404cd3fadd",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 1460,
+        "wires": []
+    },
+    {
+        "id": "0849eb0706dc637e",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "check Max Temperature",
+        "func": "var roomConfig = flow.get('roomConfig') || [{\"minTemp\": 20, \"maxTemp\": 24, \"minHum\": 42, \"maxHum\": 48, \"airqualityThreshold\": 75}, {\"minTemp\": 20, \"maxTemp\": 24, \"minHum\": 42, \"maxHum\": 48, \"airqualityThreshold\": 75}];\nvar room = flow.get('room') || 1;\n// var maxTemp = roomConfig[room].maxTemp;\nvar maxTemp = 26.5;\nif (roomConfig[room] != undefined) {\n    maxTemp = roomConfig[room].maxTemp;\n}\nvar tempFrequency = flow.get('tempFrequency') || 3;\nlet count = 0;\nif (msg.payload != undefined && Array.isArray(msg.payload)) {\n    for (let i = 0; i < msg.payload.length; i++) {\n        if (msg.payload[i].temp > maxTemp) {\n            count = count + 1;\n        }\n    }\n}\n\nif (count > tempFrequency)\n    msg.payload = true;\nelse\n    msg.payload = false;\n\nvar pedestalMac = flow.get('pedestalMac') || '2CAA8E6DDF9C';\nmsg.pedestalMac = pedestalMac;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 1500,
+        "wires": [
+            [
+                "9e6755404cd3fadd",
+                "a6b320f169fe3167"
+            ]
+        ]
+    },
+    {
+        "id": "c75c3d7f88e5df51",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 1680,
+        "wires": []
+    },
+    {
+        "id": "1eaaba856e3b62ac",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "check Min Humidity",
+        "func": "var roomConfig = flow.get('roomConfig') || [{\"minTemp\": 20, \"maxTemp\": 24, \"minHum\": 42, \"maxHum\": 48, \"airqualityThreshold\": 80}, {\"minTemp\": 20, \"maxTemp\": 24, \"minHum\": 42, \"maxHum\": 48, \"airqualityThreshold\": 80}];\nvar room = flow.get('room') || 1;\n// var minHum = roomConfig[room].minHum;\nvar minHum = 51;\nif (roomConfig[room] != undefined) {\n    minHum = roomConfig[room].minHum;\n}\n\nvar humFrequency = flow.get('humFrequency') || 3;\nlet count = 0;\nif (msg.payload != undefined && Array.isArray(msg.payload)) {\n    for (let i = 0; i < msg.payload.length; i++) {\n        if (msg.payload[i].hum < minHum) {\n            count = count + 1;\n        }\n    }\n}\n\nif (count > humFrequency)\n    msg.payload = true;\nelse\n    msg.payload = false;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1700,
+        "wires": [
+            [
+                "c75c3d7f88e5df51",
+                "f66cef5ba3ef82d3"
+            ]
+        ]
+    },
+    {
+        "id": "11c5d8abd8759050",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 1840,
+        "wires": []
+    },
+    {
+        "id": "c53b8b7dcaadd798",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "check Max Humidity",
+        "func": "var roomConfig = flow.get('roomConfig') || [{\"minTemp\": 20, \"maxTemp\": 24, \"minHum\": 42, \"maxHum\": 48, \"airqualityThreshold\": 75}, {\"minTemp\": 20, \"maxTemp\": 24, \"minHum\": 42, \"maxHum\": 48, \"airqualityThreshold\": 75}];\nvar room = flow.get('room') || 1;\n// var maxHum = roomConfig[room].maxHum;\nvar maxHum = 80;\nif (roomConfig[room] != undefined) {\n    maxHum = roomConfig[room].maxHum;\n}\n\nvar humFrequency = flow.get('humFrequency') || 3;\nlet count = 0;\nif (msg.payload != undefined && Array.isArray(msg.payload)) {\n    for (let i = 0; i < msg.payload.length; i++) {\n        if (msg.payload[i].hum > maxHum) {\n            count = count + 1;\n        }\n    }\n}\n\nif (count > humFrequency)\n    msg.payload = true;\nelse\n    msg.payload = false;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 1840,
+        "wires": [
+            [
+                "11c5d8abd8759050",
+                "49ae9a3764471a93"
+            ]
+        ]
+    },
+    {
+        "id": "f688abde9439fb57",
+        "type": "grove digital output",
+        "z": "11912c511061125c",
+        "name": "Humidifier",
+        "board": "84dbf1b7e80b74de",
+        "pin": "4",
+        "x": 920,
+        "y": 1740,
+        "wires": []
+    },
+    {
+        "id": "02b11c26cbe689b8",
+        "type": "switch",
+        "z": "11912c511061125c",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "true",
+                "vt": "jsonata"
+            },
+            {
+                "t": "eq",
+                "v": "false",
+                "vt": "jsonata"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 930,
+        "y": 1520,
+        "wires": [
+            [
+                "bb5cf5d6fb4cf279"
+            ],
+            [
+                "622f69571d5e579f"
+            ]
+        ]
+    },
+    {
+        "id": "622f69571d5e579f",
+        "type": "exec",
+        "z": "11912c511061125c",
+        "command": "sudo python3.8 Desktop/wyze1_turn_off.py",
+        "addpay": "pedestalMac",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "Turn OFF AirConditioner",
+        "x": 1130,
+        "y": 1560,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "bb5cf5d6fb4cf279",
+        "type": "exec",
+        "z": "11912c511061125c",
+        "command": "sudo python3.8 Desktop/wyze_turnon_py.py",
+        "addpay": "pedestalMac",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": true,
+        "oldrc": false,
+        "name": "Turn ON AirConditioner",
+        "x": 1150,
+        "y": 1480,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "4f2de987e64288f7",
+        "type": "influxdb in",
+        "z": "11912c511061125c",
+        "influxdb": "a82e2ef3e4055598",
+        "name": "Query airquality_v1_3",
+        "query": "select * from airquality_v1_3 order by time desc limit 5",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "organisation",
+        "x": 340,
+        "y": 2040,
+        "wires": [
+            [
+                "9199005249e66e6b"
+            ]
+        ]
+    },
+    {
+        "id": "a50136859d6d91af",
+        "type": "inject",
+        "z": "11912c511061125c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 2040,
+        "wires": [
+            [
+                "4f2de987e64288f7"
+            ]
+        ]
+    },
+    {
+        "id": "a3d5ec26c2e7065d",
+        "type": "influxdb in",
+        "z": "11912c511061125c",
+        "influxdb": "a82e2ef3e4055598",
+        "name": "Query dust",
+        "query": "select * from dust order by time desc limit 5",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "organisation",
+        "x": 370,
+        "y": 2240,
+        "wires": [
+            [
+                "94f2f48e0307cd12"
+            ]
+        ]
+    },
+    {
+        "id": "7d01305e89a67879",
+        "type": "inject",
+        "z": "11912c511061125c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 2240,
+        "wires": [
+            [
+                "a3d5ec26c2e7065d"
+            ]
+        ]
+    },
+    {
+        "id": "9199005249e66e6b",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "check Airquality threshold",
+        "func": "var roomConfig = flow.get('roomConfig') || [{\"minTemp\": 20, \"maxTemp\": 24, \"minHum\": 42, \"maxHum\": 48, \"airqualityThreshold\": 140}, {\"minTemp\": 20, \"maxTemp\": 24, \"minHum\": 42, \"maxHum\": 48, \"airqualityThreshold\": 140}];\nvar room = flow.get('room') || 1;\n// var airqualityThreshold = roomConfig[room].airqualityThreshold;\nvar airqualityThreshold = 100;\nif (roomConfig[room] != undefined) {\n    airqualityThreshold = roomConfig[room].airqualityThreshold;\n}\n\nvar airqualityFrequency = flow.get('airqualityFrequency') || 3;\nlet count = 0;\nif (msg.payload != undefined && Array.isArray(msg.payload)) {\n    for (let i = 0; i < msg.payload.length; i++) {\n        if (msg.payload[i].airquality > airqualityThreshold) {\n            count = count + 1;\n        }\n    }\n}\n\nmsg.topic = count;\n\nif (count > airqualityFrequency)\n    msg.payload = true;\nelse\n    msg.payload = false;\n\nvar exhaustMac = flow.get('exhaustMac') || '2CAA8E6DE06F';\nmsg.exhaustMac = exhaustMac;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 2040,
+        "wires": [
+            [
+                "b59498d057a80bad",
+                "643ac350a9a4ba36"
+            ]
+        ]
+    },
+    {
+        "id": "c1fb3e11f594ad86",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 370,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "a6b320f169fe3167",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Detect change",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload",
+        "topi": "topic",
+        "x": 740,
+        "y": 1520,
+        "wires": [
+            [
+                "02b11c26cbe689b8",
+                "596d84625719e290",
+                "5f8c39b1bc2e6add"
+            ]
+        ]
+    },
+    {
+        "id": "f66cef5ba3ef82d3",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Detect change",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload",
+        "topi": "topic",
+        "x": 660,
+        "y": 1740,
+        "wires": [
+            [
+                "f688abde9439fb57",
+                "15964fa3206473d1"
+            ]
+        ]
+    },
+    {
+        "id": "49ae9a3764471a93",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Detect change",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload",
+        "topi": "topic",
+        "x": 680,
+        "y": 1900,
+        "wires": [
+            [
+                "926def206713d68d",
+                "f760f8346e67ac19"
+            ]
+        ]
+    },
+    {
+        "id": "b59498d057a80bad",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Detect change",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload",
+        "topi": "topic",
+        "x": 840,
+        "y": 2020,
+        "wires": [
+            [
+                "6b6a87c706c71332",
+                "64db47e9228bc376"
+            ]
+        ]
+    },
+    {
+        "id": "926def206713d68d",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 850,
+        "y": 1840,
+        "wires": []
+    },
+    {
+        "id": "291df27d92276e50",
+        "type": "grove digital output",
+        "z": "11912c511061125c",
+        "name": "Air Purifier",
+        "board": "84dbf1b7e80b74de",
+        "pin": "8",
+        "x": 1150,
+        "y": 2240,
+        "wires": []
+    },
+    {
+        "id": "94f2f48e0307cd12",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "check Dust threshold",
+        "func": "var dustThreshold = flow.get('dustThreshold') || 7000;\n\nvar dustFrequency = flow.get('dustFrequency') || 3;\nlet count = 0;\nif (msg.payload != undefined && Array.isArray(msg.payload)) {\n    for (let i = 0; i < msg.payload.length; i++) {\n        if (msg.payload[i].concentration > dustThreshold) {\n            count = count + 1;\n        }\n    }\n}\n\nif (count > dustFrequency)\n    msg.payload = true;\nelse\n    msg.payload = false;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 2240,
+        "wires": [
+            [
+                "e07b1dcdbd69169b",
+                "bb5eccad31d5198a"
+            ]
+        ]
+    },
+    {
+        "id": "e07b1dcdbd69169b",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Detect change",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload",
+        "topi": "topic",
+        "x": 920,
+        "y": 2240,
+        "wires": [
+            [
+                "291df27d92276e50",
+                "daea2afe5a740d49",
+                "039eed6da11a5802"
+            ]
+        ]
+    },
+    {
+        "id": "149bd70db1a63f70",
+        "type": "influxdb in",
+        "z": "11912c511061125c",
+        "influxdb": "a82e2ef3e4055598",
+        "name": "Query sgp30",
+        "query": "select * from sgp30 order by time desc limit 5",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "organisation",
+        "x": 290,
+        "y": 2140,
+        "wires": [
+            [
+                "813fe543a572b289"
+            ]
+        ]
+    },
+    {
+        "id": "4a6f46f9d2ad936c",
+        "type": "inject",
+        "z": "11912c511061125c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 2140,
+        "wires": [
+            [
+                "149bd70db1a63f70"
+            ]
+        ]
+    },
+    {
+        "id": "813fe543a572b289",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "check tVOC threshold",
+        "func": "var tvocThreshold = flow.get('tvocThreshold') || 20;\n\nvar tvocFrequency = flow.get('tvocFrequency') || 3;\nlet count = 0;\nif (msg.payload != undefined && Array.isArray(msg.payload)) {\n    for (let i = 0; i < msg.payload.length; i++) {\n        if (msg.payload[i].tvoc > tvocThreshold) {\n            count = count + 1;\n        }\n    }\n}\n\nif (count > tvocFrequency)\n    msg.payload = true;\nelse\n    msg.payload = false;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 2140,
+        "wires": [
+            [
+                "ea6d2e2ab629033b"
+            ]
+        ]
+    },
+    {
+        "id": "ea6d2e2ab629033b",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Detect change",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload",
+        "topi": "topic",
+        "x": 800,
+        "y": 2140,
+        "wires": [
+            [
+                "1e061371f15eda88"
+            ]
+        ]
+    },
+    {
+        "id": "643ac350a9a4ba36",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 2080,
+        "wires": []
+    },
+    {
+        "id": "6b6a87c706c71332",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1010,
+        "y": 2080,
+        "wires": []
+    },
+    {
+        "id": "45992c02457f2b78",
+        "type": "inject",
+        "z": "11912c511061125c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 2440,
+        "wires": [
+            [
+                "bc9976cc6bdfddf5"
+            ]
+        ]
+    },
+    {
+        "id": "5b9d3bfab190ee71",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Detect change",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload",
+        "topi": "topic",
+        "x": 800,
+        "y": 1400,
+        "wires": [
+            [
+                "21f7a3c16ce6588a",
+                "21f7a3c16ce6588a",
+                "6d102c03087df911",
+                "a57ff8b1ee58d521"
+            ]
+        ]
+    },
+    {
+        "id": "21f7a3c16ce6588a",
+        "type": "kasa",
+        "z": "11912c511061125c",
+        "name": "Heater - EP10(US)",
+        "device": "10.0.0.129",
+        "interval": 60000,
+        "eventInterval": 15000,
+        "payload": "getInfo",
+        "payloadType": "info",
+        "debug": false,
+        "x": 1030,
+        "y": 1400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ca84fe108f5c4d0f",
+        "type": "switch",
+        "z": "11912c511061125c",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 750,
+        "y": 2440,
+        "wires": [
+            [
+                "d4e04e0c9b72479d",
+                "831ee87f3d2aa61e"
+            ],
+            [
+                "bd868b08b452d3a6"
+            ]
+        ]
+    },
+    {
+        "id": "d4e04e0c9b72479d",
+        "type": "exec",
+        "z": "11912c511061125c",
+        "command": "sudo python3.8 Desktop/wyze_turnon_py.py",
+        "addpay": "exhaustMac",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": true,
+        "oldrc": false,
+        "name": "Turn ON Ventilator",
+        "x": 950,
+        "y": 2400,
+        "wires": [
+            [
+                "816f98740b4cd5a8"
+            ],
+            [
+                "816f98740b4cd5a8"
+            ],
+            [
+                "816f98740b4cd5a8"
+            ]
+        ]
+    },
+    {
+        "id": "816f98740b4cd5a8",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1230,
+        "y": 2400,
+        "wires": []
+    },
+    {
+        "id": "831ee87f3d2aa61e",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 950,
+        "y": 2460,
+        "wires": []
+    },
+    {
+        "id": "bd868b08b452d3a6",
+        "type": "exec",
+        "z": "11912c511061125c",
+        "command": "sudo python3.8 Desktop/wyze1_turn_off.py",
+        "addpay": "exhaustMac",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "Turn OFF Ventilator",
+        "x": 950,
+        "y": 2520,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "bc9976cc6bdfddf5",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "OR",
+        "func": "var maxHumStatus = flow.get('maxHumStatus') || false;\nvar airqualityStatus = flow.get('airqualityStatus') || false;\nvar tvocStatus = flow.get('tvocStatus') || false;\n\nif (maxHumStatus || airqualityStatus || tvocStatus)\n    msg.payload = true;\nelse\n    msg.payload = false;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 2440,
+        "wires": [
+            [
+                "8950b6373cf37950"
+            ]
+        ]
+    },
+    {
+        "id": "8950b6373cf37950",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Detect change",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload",
+        "topi": "topic",
+        "x": 460,
+        "y": 2440,
+        "wires": [
+            [
+                "62ad14035faab8cf",
+                "2d34a9e42915b4c8"
+            ]
+        ]
+    },
+    {
+        "id": "f760f8346e67ac19",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "check Max Humidity",
+        "func": "if (msg.payload)\n    flow.set('maxHumStatus', true);\nelse\n    flow.set('maxHumStatus', false);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 1900,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "64db47e9228bc376",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "check Airquality threshold",
+        "func": "if (msg.payload)\n    flow.set('airqualityStatus', true);\nelse\n    flow.set('airqualityStatus', false);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1110,
+        "y": 2020,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1e061371f15eda88",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "check tVOC threshold",
+        "func": "if (msg.payload)\n    flow.set('tvocStatus', true);\nelse\n    flow.set('tvocStatus', false);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1120,
+        "y": 2140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "62ad14035faab8cf",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "Add Device Mac",
+        "func": "var exhaustMac = flow.get('exhaustMac') || '2CAA8E6DE06F';\nmsg.exhaustMac = exhaustMac;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 2360,
+        "wires": [
+            [
+                "ca84fe108f5c4d0f"
+            ]
+        ]
+    },
+    {
+        "id": "7a461c772d46f46f",
+        "type": "influxdb out",
+        "z": "11912c511061125c",
+        "influxdb": "a82e2ef3e4055598",
+        "name": "actuatorStatus",
+        "measurement": "actuatorStatus",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 880,
+        "y": 2600,
+        "wires": []
+    },
+    {
+        "id": "2d34a9e42915b4c8",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "create ventilator payload",
+        "func": "var room = flow.get('room') || 1;\nmsg.payload = [{\n    status: msg.payload\n},\n{\n    room: room,\n    actuator: 'ventilator'\n}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 2600,
+        "wires": [
+            [
+                "7a461c772d46f46f"
+            ]
+        ]
+    },
+    {
+        "id": "bb5eccad31d5198a",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 830,
+        "y": 2300,
+        "wires": []
+    },
+    {
+        "id": "daea2afe5a740d49",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1110,
+        "y": 2300,
+        "wires": []
+    },
+    {
+        "id": "596d84625719e290",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 930,
+        "y": 1460,
+        "wires": []
+    },
+    {
+        "id": "ecbbd67c0d5ccacb",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "create room payload",
+        "func": "flow.set('room', msg.payload);\nmsg.payload={\n    roomstat:msg.payload\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 180,
+        "wires": [
+            [
+                "85aa7a0a3a52f138",
+                "d524d130e331a189"
+            ]
+        ]
+    },
+    {
+        "id": "85aa7a0a3a52f138",
+        "type": "influxdb out",
+        "z": "11912c511061125c",
+        "influxdb": "a82e2ef3e4055598",
+        "name": "roomStatus",
+        "measurement": "roomStatus",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 1230,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "8a9f123de42282c7",
+        "type": "rbe",
+        "z": "11912c511061125c",
+        "name": "Detect change",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload",
+        "topi": "topic",
+        "x": 700,
+        "y": 180,
+        "wires": [
+            [
+                "e781df9930ef2e79",
+                "ecbbd67c0d5ccacb"
+            ]
+        ]
+    },
+    {
+        "id": "e781df9930ef2e79",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 890,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "f4bbb594a655a39f",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "4da6a0fbbf38b282",
+        "type": "ui_slider",
+        "z": "11912c511061125c",
+        "name": "",
+        "label": "Minimum Temperature",
+        "tooltip": "",
+        "group": "2b3e30d6b8e8c29b",
+        "order": 1,
+        "width": 7,
+        "height": 1,
+        "passthru": true,
+        "outs": "all",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "50",
+        "step": 1,
+        "className": "",
+        "x": 300,
+        "y": 2700,
+        "wires": [
+            [
+                "5fb444b832aa14e4"
+            ]
+        ]
+    },
+    {
+        "id": "cabafb4190995349",
+        "type": "ui_slider",
+        "z": "11912c511061125c",
+        "name": "",
+        "label": "Max Temperature",
+        "tooltip": "",
+        "group": "2b3e30d6b8e8c29b",
+        "order": 3,
+        "width": 7,
+        "height": 1,
+        "passthru": false,
+        "outs": "all",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": "0",
+        "max": "50",
+        "step": 1,
+        "className": "",
+        "x": 290,
+        "y": 2780,
+        "wires": [
+            [
+                "9db8cdcd119a9e74"
+            ]
+        ]
+    },
+    {
+        "id": "5fb444b832aa14e4",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "",
+        "func": "var roomConfig = flow.get('roomConfig');\nroomConfig[0].minTemp = msg.payload;\nflow.set('roomConfig',roomConfig);\nmsg.payload = msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 2700,
+        "wires": [
+            [
+                "32b02f8eece4ba4c"
+            ]
+        ]
+    },
+    {
+        "id": "9db8cdcd119a9e74",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "",
+        "func": "var roomConfig = flow.get(\"roomConfig\");\nroomConfig[0].maxTemp = msg.payload;\nflow.set('roomConfig',roomConfig);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 2780,
+        "wires": [
+            [
+                "cc85cc8f956001e3"
+            ]
+        ]
+    },
+    {
+        "id": "c64f3548303f5a7a",
+        "type": "ui_slider",
+        "z": "11912c511061125c",
+        "name": "",
+        "label": "Minimum Humidity",
+        "tooltip": "",
+        "group": "2b3e30d6b8e8c29b",
+        "order": 5,
+        "width": 7,
+        "height": 1,
+        "passthru": true,
+        "outs": "all",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "100",
+        "step": 1,
+        "className": "",
+        "x": 290,
+        "y": 2880,
+        "wires": [
+            [
+                "609f93aec72452b1"
+            ]
+        ]
+    },
+    {
+        "id": "0b49f6c177ec4748",
+        "type": "ui_slider",
+        "z": "11912c511061125c",
+        "name": "",
+        "label": "Max Humidity",
+        "tooltip": "",
+        "group": "2b3e30d6b8e8c29b",
+        "order": 7,
+        "width": 7,
+        "height": 1,
+        "passthru": false,
+        "outs": "all",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": "0",
+        "max": "100",
+        "step": 1,
+        "className": "",
+        "x": 280,
+        "y": 2960,
+        "wires": [
+            [
+                "e9effe521b99282b"
+            ]
+        ]
+    },
+    {
+        "id": "609f93aec72452b1",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "",
+        "func": "var roomConfig = flow.get(\"roomConfig\");\nroomConfig[0].minHum = msg.payload;\nflow.set('roomConfig',roomConfig);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 2880,
+        "wires": [
+            [
+                "9f789eac04f576f8"
+            ]
+        ]
+    },
+    {
+        "id": "e9effe521b99282b",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "",
+        "func": "var roomConfig = flow.get(\"roomConfig\");\nroomConfig[0].maxHum = msg.payload;\nflow.set('roomConfig',roomConfig);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 2960,
+        "wires": [
+            [
+                "99e520db63089432"
+            ]
+        ]
+    },
+    {
+        "id": "28ecdfc0898f5786",
+        "type": "ui_slider",
+        "z": "11912c511061125c",
+        "name": "",
+        "label": "Minimum Temperature",
+        "tooltip": "",
+        "group": "8ca5a1f387d76785",
+        "order": 1,
+        "width": 7,
+        "height": 1,
+        "passthru": true,
+        "outs": "all",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "50",
+        "step": 1,
+        "className": "",
+        "x": 980,
+        "y": 2700,
+        "wires": [
+            [
+                "0e001572cd4211c4"
+            ]
+        ]
+    },
+    {
+        "id": "2ee5e080539001f0",
+        "type": "ui_slider",
+        "z": "11912c511061125c",
+        "name": "",
+        "label": "Max Temperature",
+        "tooltip": "",
+        "group": "8ca5a1f387d76785",
+        "order": 3,
+        "width": 7,
+        "height": 1,
+        "passthru": false,
+        "outs": "all",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": "0",
+        "max": "50",
+        "step": 1,
+        "className": "",
+        "x": 970,
+        "y": 2780,
+        "wires": [
+            [
+                "064e995a98055bfd"
+            ]
+        ]
+    },
+    {
+        "id": "0e001572cd4211c4",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "",
+        "func": "var roomConfig = flow.get(\"roomConfig\");\nroomConfig[1].minTemp = msg.payload;\nflow.set('roomConfig',roomConfig);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1180,
+        "y": 2700,
+        "wires": [
+            [
+                "5537afea12d6b3dc"
+            ]
+        ]
+    },
+    {
+        "id": "064e995a98055bfd",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "",
+        "func": "var roomConfig = flow.get(\"roomConfig\");\nroomConfig[1].maxTemp = msg.payload;\nflow.set('roomConfig',roomConfig);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1180,
+        "y": 2780,
+        "wires": [
+            [
+                "6b4787fb873e43fa"
+            ]
+        ]
+    },
+    {
+        "id": "2a469a9b08617e5a",
+        "type": "ui_slider",
+        "z": "11912c511061125c",
+        "name": "",
+        "label": "Minimum Humidity",
+        "tooltip": "",
+        "group": "8ca5a1f387d76785",
+        "order": 5,
+        "width": 7,
+        "height": 1,
+        "passthru": true,
+        "outs": "all",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "100",
+        "step": 1,
+        "className": "",
+        "x": 970,
+        "y": 2880,
+        "wires": [
+            [
+                "20593534d396dbc2"
+            ]
+        ]
+    },
+    {
+        "id": "4e0c3dd2b8fdb287",
+        "type": "ui_slider",
+        "z": "11912c511061125c",
+        "name": "",
+        "label": "Max Humidity",
+        "tooltip": "",
+        "group": "8ca5a1f387d76785",
+        "order": 7,
+        "width": 7,
+        "height": 1,
+        "passthru": false,
+        "outs": "all",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": "0",
+        "max": "100",
+        "step": 1,
+        "className": "",
+        "x": 980,
+        "y": 2960,
+        "wires": [
+            [
+                "52e4ef61fda7d71c"
+            ]
+        ]
+    },
+    {
+        "id": "20593534d396dbc2",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "",
+        "func": "var roomConfig = flow.get(\"roomConfig\");\nroomConfig[1].minHum = msg.payload;\nflow.set('roomConfig',roomConfig);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1180,
+        "y": 2880,
+        "wires": [
+            [
+                "47473b8852955ce7"
+            ]
+        ]
+    },
+    {
+        "id": "52e4ef61fda7d71c",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "",
+        "func": "var roomConfig = flow.get(\"roomConfig\");\nroomConfig[1].maxHum = msg.payload;\nflow.set('roomConfig',roomConfig);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1180,
+        "y": 2960,
+        "wires": [
+            [
+                "316ad72853390768"
+            ]
+        ]
+    },
+    {
+        "id": "32b02f8eece4ba4c",
+        "type": "ui_text",
+        "z": "11912c511061125c",
+        "group": "2b3e30d6b8e8c29b",
+        "order": 2,
+        "width": 1,
+        "height": 1,
+        "name": "Min Temp text",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "x": 720,
+        "y": 2700,
+        "wires": []
+    },
+    {
+        "id": "cc85cc8f956001e3",
+        "type": "ui_text",
+        "z": "11912c511061125c",
+        "group": "2b3e30d6b8e8c29b",
+        "order": 4,
+        "width": 1,
+        "height": 1,
+        "name": "Max Temp text",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "x": 720,
+        "y": 2780,
+        "wires": []
+    },
+    {
+        "id": "9f789eac04f576f8",
+        "type": "ui_text",
+        "z": "11912c511061125c",
+        "group": "2b3e30d6b8e8c29b",
+        "order": 6,
+        "width": 1,
+        "height": 1,
+        "name": "Min Humidity text",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "x": 750,
+        "y": 2880,
+        "wires": []
+    },
+    {
+        "id": "99e520db63089432",
+        "type": "ui_text",
+        "z": "11912c511061125c",
+        "group": "2b3e30d6b8e8c29b",
+        "order": 8,
+        "width": 1,
+        "height": 1,
+        "name": "Max Humidity text",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "x": 750,
+        "y": 2960,
+        "wires": []
+    },
+    {
+        "id": "47473b8852955ce7",
+        "type": "ui_text",
+        "z": "11912c511061125c",
+        "group": "8ca5a1f387d76785",
+        "order": 6,
+        "width": 1,
+        "height": 1,
+        "name": "Min Humidity text",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "x": 1410,
+        "y": 2880,
+        "wires": []
+    },
+    {
+        "id": "316ad72853390768",
+        "type": "ui_text",
+        "z": "11912c511061125c",
+        "group": "8ca5a1f387d76785",
+        "order": 8,
+        "width": 1,
+        "height": 1,
+        "name": "Max Humidity text",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "x": 1410,
+        "y": 2960,
+        "wires": []
+    },
+    {
+        "id": "6b4787fb873e43fa",
+        "type": "ui_text",
+        "z": "11912c511061125c",
+        "group": "8ca5a1f387d76785",
+        "order": 4,
+        "width": 1,
+        "height": 1,
+        "name": "Max temp text",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "x": 1380,
+        "y": 2780,
+        "wires": []
+    },
+    {
+        "id": "5537afea12d6b3dc",
+        "type": "ui_text",
+        "z": "11912c511061125c",
+        "group": "8ca5a1f387d76785",
+        "order": 2,
+        "width": 1,
+        "height": 1,
+        "name": "Min Temp Text",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "x": 1380,
+        "y": 2700,
+        "wires": []
+    },
+    {
+        "id": "039eed6da11a5802",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "create airPurifier payload",
+        "func": "var room = flow.get('room') || 1;\nmsg.payload = [{\n    status: msg.payload\n},\n{\n    room: room,\n    actuator: 'airPurifier'\n}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 2200,
+        "wires": [
+            [
+                "c27cf3a12e3875d0"
+            ]
+        ]
+    },
+    {
+        "id": "c27cf3a12e3875d0",
+        "type": "influxdb out",
+        "z": "11912c511061125c",
+        "influxdb": "a82e2ef3e4055598",
+        "name": "actuatorStatus",
+        "measurement": "actuatorStatus",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 1320,
+        "y": 2300,
+        "wires": []
+    },
+    {
+        "id": "15964fa3206473d1",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "create humidifier payload",
+        "func": "var room = flow.get('room') || 1;\nmsg.payload = [{\n    status: msg.payload\n},\n{\n    room: room,\n    actuator: 'humidifier'\n}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 890,
+        "y": 1800,
+        "wires": [
+            [
+                "3d28db4e16a82515"
+            ]
+        ]
+    },
+    {
+        "id": "3d28db4e16a82515",
+        "type": "influxdb out",
+        "z": "11912c511061125c",
+        "influxdb": "a82e2ef3e4055598",
+        "name": "actuatorStatus",
+        "measurement": "actuatorStatus",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 1120,
+        "y": 1800,
+        "wires": []
+    },
+    {
+        "id": "6d102c03087df911",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "create heater payload",
+        "func": "var room = flow.get('room') || 1;\nmsg.payload = [{\n    status: msg.payload\n},\n{\n    room: room,\n    actuator: 'heater'\n}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 1340,
+        "wires": [
+            [
+                "47c05c503960ce17"
+            ]
+        ]
+    },
+    {
+        "id": "47c05c503960ce17",
+        "type": "influxdb out",
+        "z": "11912c511061125c",
+        "influxdb": "a82e2ef3e4055598",
+        "name": "actuatorStatus",
+        "measurement": "actuatorStatus",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 1300,
+        "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "5f8c39b1bc2e6add",
+        "type": "function",
+        "z": "11912c511061125c",
+        "name": "create airConditioner payload",
+        "func": "var room = flow.get('room') || 1;\nmsg.payload = [{\n    status: msg.payload\n},\n{\n    room: room,\n    actuator: 'airConditioner'\n}];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1020,
+        "y": 1640,
+        "wires": [
+            [
+                "81bf688a5972a552"
+            ]
+        ]
+    },
+    {
+        "id": "81bf688a5972a552",
+        "type": "influxdb out",
+        "z": "11912c511061125c",
+        "influxdb": "a82e2ef3e4055598",
+        "name": "actuatorStatus",
+        "measurement": "actuatorStatus",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 1260,
+        "y": 1640,
+        "wires": []
+    },
+    {
+        "id": "a57ff8b1ee58d521",
+        "type": "debug",
+        "z": "11912c511061125c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1290,
+        "y": 1440,
+        "wires": []
+    },
+    {
+        "id": "a82e2ef3e4055598",
+        "type": "influxdb",
+        "hostname": "10.0.0.105",
+        "port": "8086",
+        "protocol": "http",
+        "database": "tcss573project",
+        "name": "tcss573project",
+        "usetls": false,
+        "tls": "d50d0c9f.31e858",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "84dbf1b7e80b74de",
+        "type": "board-config",
+        "board": "GrovePi"
+    },
+    {
+        "id": "2b3e30d6b8e8c29b",
+        "type": "ui_group",
+        "name": "Living Room",
+        "tab": "941df452e0333d2d",
+        "order": 1,
+        "disp": true,
+        "width": "8",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "8ca5a1f387d76785",
+        "type": "ui_group",
+        "name": "Bedroom",
+        "tab": "941df452e0333d2d",
+        "order": 2,
+        "disp": true,
+        "width": "8",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "d50d0c9f.31e858",
+        "type": "tls-config",
+        "name": "",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false
+    },
+    {
+        "id": "941df452e0333d2d",
+        "type": "ui_tab",
+        "name": "AIR QUALITY ",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
